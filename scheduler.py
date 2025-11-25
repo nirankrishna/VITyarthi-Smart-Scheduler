@@ -2,16 +2,16 @@ import csv
 from datetime import datetime
 from operator import attrgetter
 
-# --- 1. Task Class (Object-Oriented Programming) ---
+
 class Task:
     """Represents a single task with attributes and methods."""
     def __init__(self, name, subject, due_date_str, priority, is_completed=False):
         self.name = name
         self.subject = subject
-        self.priority = priority.upper()  # Ensure consistency: HIGH, MEDIUM, LOW
+        self.priority = priority.upper() 
         self.is_completed = is_completed
         try:
-            # Store date as a datetime object for easy sorting and comparison
+           
             self.due_date = datetime.strptime(due_date_str, "%Y-%m-%d")
             self.due_date_str = due_date_str
         except ValueError:
@@ -33,7 +33,7 @@ class Task:
             'True' if self.is_completed else 'False'
         ]
 
-# --- 2. Data Management (File I/O) ---
+
 TASK_FILE = 'tasks.csv'
 
 def load_tasks():
@@ -49,7 +49,7 @@ def load_tasks():
                     try:
                         tasks.append(Task(name, subject, date_str, priority, is_completed))
                     except ValueError:
-                        # Skip task with bad date format
+                        
                         print(f"Skipping task due to bad date format: {name}")
     except FileNotFoundError:
         print("Task file not found. Starting with an empty task list.")
@@ -63,13 +63,13 @@ def save_tasks(tasks):
             writer.writerow(task.to_csv_row())
     print("\nTasks saved successfully.")
 
-# --- 3. Core Logic (Algorithm Development) ---
+
 def add_task(tasks):
     """Prompts the user for task details and adds a new Task object."""
     print("\n--- Add New Task ---")
     name = input("Task Name: ")
     subject = input("Subject: ")
-    # Basic date validation
+    
     while True:
         due_date_str = input("Due Date (YYYY-MM-DD): ")
         try:
@@ -78,7 +78,7 @@ def add_task(tasks):
         except ValueError:
             print("Invalid date format. Please use YYYY-MM-DD.")
     
-    # Basic priority validation
+    
     while True:
         priority = input("Priority (HIGH, MEDIUM, LOW): ").upper()
         if priority in ['HIGH', 'MEDIUM', 'LOW']:
@@ -100,13 +100,13 @@ def view_tasks(tasks):
         print("\n🎉 No pending tasks! Time for a break. 🎉")
         return
 
-    # Sort tasks: 1. By Priority (Custom Order), 2. By Due Date
+   
     priority_order = {'HIGH': 0, 'MEDIUM': 1, 'LOW': 2}
     
-    # Python's list.sort() is stable, so we sort by the secondary key first
-    # Sort by Due Date (Ascending)
+    
+    
     pending_tasks.sort(key=attrgetter('due_date')) 
-    # Sort by Priority (Custom Order)
+    
     pending_tasks.sort(key=lambda task: priority_order[task.priority])
     
     print("\n--- PENDING TASKS (Sorted by Priority & Date) ---")
@@ -131,13 +131,13 @@ def mark_complete(tasks):
             if choice == 0:
                 return
             if 1 <= choice <= len(pending_tasks):
-                # Find the corresponding object in the main tasks list and update it
+                
                 task_to_complete = pending_tasks[choice - 1]
                 
-                # We need to find the *original* task object reference in the 'tasks' list
-                # to ensure the save_tasks function works correctly on the whole list.
+                
+                
                 for task in tasks:
-                    if task is task_to_complete: # Check if they are the same object instance
+                    if task is task_to_complete: 
                         task.is_completed = True
                         print(f"\nTask '{task.name}' marked as complete! Well done.")
                         save_tasks(tasks)
@@ -147,7 +147,7 @@ def mark_complete(tasks):
         except ValueError:
             print("Invalid input. Please enter a number.")
 
-# --- 4. Main Program / User Interface ---
+
 def display_menu():
     """Displays the main menu options."""
     print("\n\n=== Smart Study Scheduler ===")
@@ -159,8 +159,8 @@ def display_menu():
 
 def main():
     """Main function to run the application."""
-    tasks = load_tasks() # Load existing tasks at startup
-
+    tasks = load_tasks() 
+    
     while True:
         display_menu()
         choice = input("Enter your choice (1-5): ")
@@ -186,3 +186,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
